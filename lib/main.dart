@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -44,6 +45,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Firestore db = Firestore.instance;
   int _counter = 0;
 
   void _incrementCounter() {
@@ -54,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
+      db.collection('users').add({'name': 'La pame'});
     });
   }
 
