@@ -6,6 +6,8 @@ class Personal {
   final String idPersonalType;
   final String name;
 
+  String uid;
+
   Personal({
     @required this.email,
     @required this.idPersonalType,

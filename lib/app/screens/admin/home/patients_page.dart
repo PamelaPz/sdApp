@@ -64,6 +64,13 @@ class _PatientsPageState extends State<PatientsPage> {
                   ),
                 ),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text('observaciones:'),
+                  Text(entry.observations.toString()),
+                ],
+              ),
               patientStream(entry),
             ],
           ),
@@ -85,11 +92,13 @@ class _PatientsPageState extends State<PatientsPage> {
           Patient patient = Patient.fromDocumentSnapshot(snapshot.data);
 
           return Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Text('Ingreso:'),
+                  Text('Ingresó:'),
                   Text(patient.dateEgress.toString()),
                 ],
               ),
@@ -110,6 +119,28 @@ class _PatientsPageState extends State<PatientsPage> {
                       children: <Widget>[
                         Text('Registró:'),
                         Text(personal.name.toString())
+                      ],
+                    );
+                  }
+                },
+              ),
+              StreamBuilder(
+                stream: firestore
+                    .collection('personal')
+                    .document(patient.idPersonal)
+                    .snapshots(),
+                builder: (context, snap) {
+                  if (!snap.hasData) {
+                    return CircularProgressIndicator();
+                  } else {
+                    Personal personal =
+                        Personal.fromDocumentSnapshot(snap.data);
+
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text('Medico a cargo:'),
+                        Text(personal.name)
                       ],
                     );
                   }

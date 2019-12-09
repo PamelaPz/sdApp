@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sd_app/app/blocs.dart';
+import 'package:sd_app/app/screens/admin/home/blocs/doctors/bloc.dart';
+import 'package:sd_app/app/screens/admin/home/blocs/nurses/bloc.dart';
 import 'package:sd_app/app/screens/admin/home/blocs/patients/bloc.dart';
+import 'package:sd_app/app/screens/admin/home/blocs/security/bloc.dart';
 import 'package:sd_app/app/screens/admin/home/doctors_page.dart';
 import 'package:sd_app/app/screens/admin/home/nurses_page.dart';
 import 'package:sd_app/app/screens/admin/home/patients_page.dart';
@@ -70,13 +73,25 @@ class _HomeScreenState extends State<HomeScreen>
         controller: _controller,
         children: <Widget>[
           BlocProvider<PatientsBloc>(
-            create: (BuildContext conext) =>
+            create: (BuildContext context) =>
                 PatientsBloc()..add(PatientsStarted()),
             child: PatientsPage(),
           ),
-          DoctorsPage(),
-          NursesPage(),
-          SecurityPersonalPage(),
+          BlocProvider<DoctorsBloc>(
+            create: (BuildContext context) =>
+                DoctorsBloc()..add(DoctorsStarted()),
+            child: DoctorsPage(),
+          ),
+          BlocProvider<NursesBloc>(
+            create: (BuildContext context) =>
+                NursesBloc()..add(NursesStarted()),
+            child: NursesPage(),
+          ),
+          BlocProvider<SecurityBloc>(
+            create: (BuildContext context) =>
+                SecurityBloc()..add(SecurityStarted()),
+            child: SecurityPersonalPage(),
+          ),
         ],
       ),
     );
