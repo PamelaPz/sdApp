@@ -9,8 +9,8 @@ class Entry {
   final String idFamily;
   final String idPatients;
   final String idPersonal;
-  final String uid;
 
+  String uid;
   Patient _patient;
 
   Entry({

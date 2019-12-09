@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sd_app/app/models/Entry.dart';
+import 'package:sd_app/app/models/Patient.dart';
+import 'package:sd_app/app/models/Personal.dart';
 import 'package:sd_app/app/screens/admin/home/blocs/patients/bloc.dart';
 
 class PatientsPage extends StatefulWidget {
@@ -9,6 +12,7 @@ class PatientsPage extends StatefulWidget {
 }
 
 class _PatientsPageState extends State<PatientsPage> {
+  Firestore firestore = Firestore.instance;
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PatientsBloc, PatientsState>(
@@ -27,12 +31,11 @@ class _PatientsPageState extends State<PatientsPage> {
                 title: Text(state.patients[index].name),
                 leading: Icon(Icons.person),
                 trailing: CircleAvatar(
-                  radius: 10,
+                  radius: 9,
                   backgroundColor: getColorAccepted(
                       accepted: state.patients[index].accepted),
                 ),
-                onTap: () =>
-                    _onTabPatientPressed(patient: state.patients[index]),
+                onTap: () => _onTabPatientPressed(entry: state.patients[index]),
               );
             },
           );
@@ -46,7 +49,7 @@ class _PatientsPageState extends State<PatientsPage> {
     return accepted ? Colors.green : Colors.red;
   }
 
-  _onTabPatientPressed({@required Entry patient}) {
+  _onTabPatientPressed({@required Entry entry}) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -54,11 +57,67 @@ class _PatientsPageState extends State<PatientsPage> {
           child: Column(
             children: <Widget>[
               ListTile(
-                title: Center(child: Text(patient.name)),
-              )
+                title: Center(child: Text(entry.name)),
+                subtitle: Center(
+                  child: Text(
+                    entry.uid.toString(),
+                  ),
+                ),
+              ),
+              patientStream(entry),
             ],
           ),
         );
+      },
+    );
+  }
+
+  StreamBuilder<DocumentSnapshot> patientStream(Entry entry) {
+    return StreamBuilder(
+      stream: firestore
+          .collection('patients')
+          .document(entry.idPatients)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          Patient patient = Patient.fromDocumentSnapshot(snapshot.data);
+
+          return Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Text('Ingreso:'),
+                  Text(patient.dateEgress.toString()),
+                ],
+              ),
+              StreamBuilder(
+                stream: firestore
+                    .collection('personal')
+                    .document(entry.idPersonal)
+                    .snapshots(),
+                builder: (context, snap) {
+                  if (!snap.hasData) {
+                    return CircularProgressIndicator();
+                  } else {
+                    Personal personal =
+                        Personal.fromDocumentSnapshot(snap.data);
+
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Text('Registró:'),
+                        Text(personal.name.toString())
+                      ],
+                    );
+                  }
+                },
+              )
+            ],
+          );
+        }
       },
     );
   }

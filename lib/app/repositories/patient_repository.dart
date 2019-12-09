@@ -7,9 +7,12 @@ class PatientRepositiry {
   Future<List<Entry>> getEntries() async {
     QuerySnapshot snapshot = await firestore.collection('entry').getDocuments();
 
-    List<Entry> entries = snapshot.documents
-        .map((doc) => Entry.fromDocumentSnapshot(doc))
-        .toList();
+    List<Entry> entries = snapshot.documents.map((doc) {
+      Entry entry = Entry.fromDocumentSnapshot(doc);
+      entry.uid = doc.documentID;
+
+      return entry;
+    }).toList();
 
     return entries;
   }

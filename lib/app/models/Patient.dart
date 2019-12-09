@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
 
 class Patient {
-  final String dateEgrees;
+  final String dateEgress;
   final String idPersonal;
   final String idStatus;
   final bool intership;
   final Firestore firestore = Firestore.instance;
 
   Patient({
-    this.dateEgrees,
+    this.dateEgress,
     this.idPersonal,
     this.idStatus,
     this.intership,
@@ -24,7 +24,7 @@ class Patient {
 
   factory Patient.fromDocumentSnapshot(DocumentSnapshot documentSnapshot) {
     return Patient(
-      dateEgrees: documentSnapshot['date_egrees'],
+      dateEgress: documentSnapshot['date_egress'],
       idPersonal: documentSnapshot['id_personal'],
       idStatus: documentSnapshot['id_status'],
       intership: documentSnapshot['intership'],
