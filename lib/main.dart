@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sd_app/app/blocs.dart';
 import 'package:bloc/bloc.dart';
 import 'package:sd_app/app/repositories/user_repository.dart';
-import 'package:sd_app/app/screens/home/home_screen.dart';
+import 'package:sd_app/app/screens/admin/home/home_screen.dart';
 import 'package:sd_app/app/screens/login/login_screen.dart';
 
 void main() {
