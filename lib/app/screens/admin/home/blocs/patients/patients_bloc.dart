@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:sd_app/app/models/Patient.dart';
+import 'package:sd_app/app/models/Entry.dart';
 import 'package:sd_app/app/repositories/patient_repository.dart';
 import './bloc.dart';
 
@@ -16,7 +16,7 @@ class PatientsBloc extends Bloc<PatientsEvent, PatientsState> {
     if (event is PatientsStarted) {
       yield PatientsLoading();
 
-      List<Patient> patients = await patientRepositiry.getPatients();
+      List<Entry> patients = await patientRepositiry.getEntries();
 
       yield PatientsLoaded(patients: patients);
     }

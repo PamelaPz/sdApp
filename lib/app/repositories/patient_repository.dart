@@ -1,15 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:sd_app/app/models/Patient.dart';
+import 'package:sd_app/app/models/Entry.dart';
 
 class PatientRepositiry {
   final Firestore firestore = Firestore.instance;
 
-  Future<List<Patient>> getPatients() async {
+  Future<List<Entry>> getEntries() async {
     QuerySnapshot snapshot = await firestore.collection('entry').getDocuments();
 
-    Iterable<Patient> patients =
-        snapshot.documents.map((doc) => Patient.fromData(doc));
+    List<Entry> entries = snapshot.documents
+        .map((doc) => Entry.fromDocumentSnapshot(doc))
+        .toList();
 
-    return patients.toList();
+    return entries;
   }
 }

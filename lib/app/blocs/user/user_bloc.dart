@@ -9,7 +9,5 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   @override
   Stream<UserState> mapEventToState(
     UserEvent event,
-  ) async* {
-    // TODO: Add Logic
-  }
+  ) async* {}
 }
